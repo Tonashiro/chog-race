@@ -25,7 +25,7 @@ export interface TrackProps {
 /**
  * Track component that renders a single race track, horse, and stats.
  */
-const Track: React.FC<TrackProps> = ({ result, status, isLast, isFirst, trophyPlace, nickname, isCurrentUser }) => (
+const Track: React.FC<TrackProps> = ({ result, status, isFirst, trophyPlace, nickname, isCurrentUser }) => (
   <div className="relative w-full flex items-center h-28">
     <img
       src={isFirst ? "/track_top.webp" : "/track.webp"}

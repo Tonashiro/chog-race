@@ -74,6 +74,7 @@ export class RaceModelUtils {
       return this.createInitialState();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { [playerId]: removed, ...remainingPlayers } = state.players;
     return {
       ...state,

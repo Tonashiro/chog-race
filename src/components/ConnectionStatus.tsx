@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface ConnectionStatusProps {
   isSynchronized: boolean;
@@ -13,8 +13,7 @@ interface ConnectionStatusProps {
 const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
   isSynchronized,
   connectionError,
-  connectionAttempts,
-  onRefresh
+  onRefresh,
 }) => {
   if (!isSynchronized && !connectionError) {
     return (
@@ -62,4 +61,4 @@ const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
   return null;
 };
 
-export default ConnectionStatus; 
+export default ConnectionStatus;

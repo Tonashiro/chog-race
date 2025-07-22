@@ -44,26 +44,25 @@ const MoveGameBar: React.FC<MoveGameBarProps> = ({
   const targetStart = useRef(
     Math.floor(Math.random() * (BAR_WIDTH - targetWidth))
   );
-  const rafRef = useRef<number | null>(null);
   const particleIdRef = useRef(0);
   const lastInteractionTime = useRef(0);
 
   // Animate cursor
   useEffect(() => {
     if (!isActive) return;
-    
+
     let animationId: number;
     let lastTime = 0;
-    
+
     const animate = (currentTime: number) => {
       if (lastTime === 0) lastTime = currentTime;
       const deltaTime = currentTime - lastTime;
       lastTime = currentTime;
-      
+
       setCursorPos((pos) => {
         const moveDistance = (speed * deltaTime) / 16; // Normalize to ~60fps
         let next = pos + dir * moveDistance;
-        
+
         if (next <= 0) {
           setDir(1);
           next = 0;
@@ -71,15 +70,15 @@ const MoveGameBar: React.FC<MoveGameBarProps> = ({
           setDir(-1);
           next = BAR_WIDTH - CURSOR_WIDTH;
         }
-        
+
         return next;
       });
-      
+
       animationId = requestAnimationFrame(animate);
     };
-    
+
     animationId = requestAnimationFrame(animate);
-    
+
     return () => {
       if (animationId) {
         cancelAnimationFrame(animationId);
@@ -91,7 +90,7 @@ const MoveGameBar: React.FC<MoveGameBarProps> = ({
   useEffect(() => {
     // Throttled logging - only log every 3 seconds
     if (Date.now() % 3000 < 100) {
-      console.log('🔄 MoveGameBar reset:', { isActive, attempt, targetWidth });
+      console.log("🔄 MoveGameBar reset:", { isActive, attempt, targetWidth });
     }
     setCursorPos(0);
     setDir(1);
@@ -105,94 +104,108 @@ const MoveGameBar: React.FC<MoveGameBarProps> = ({
   const handleMove = useCallback(() => {
     // Throttled logging - only log every 1 second
     if (Date.now() % 1000 < 100) {
-      console.log('🎯 MoveGameBar handleMove called:', { stopping, isCooldown, attempt });
+      console.log("🎯 MoveGameBar handleMove called:", {
+        stopping,
+        isCooldown,
+        attempt,
+      });
     }
-    
+
     if (stopping || isCooldown) {
       // Throttled logging - only log every 2 seconds
       if (Date.now() % 2000 < 100) {
-        console.log('❌ Move blocked:', { stopping, isCooldown });
+        console.log("❌ Move blocked:", { stopping, isCooldown });
       }
       return;
     }
-    
+
     const now = Date.now();
     const timeSinceLastInteraction = now - lastInteractionTime.current;
-    
+
     // Prevent spam: minimum 300ms between interactions
     if (timeSinceLastInteraction < 300) {
       // Throttled logging - only log every 2 seconds
       if (Date.now() % 2000 < 100) {
-        console.log('❌ Move blocked by cooldown:', timeSinceLastInteraction);
+        console.log("❌ Move blocked by cooldown:", timeSinceLastInteraction);
       }
       return;
     }
-    
+
     lastInteractionTime.current = now;
     setIsCooldown(true);
     setStopping(true);
-    
+
     const cursorCenter = cursorPos + CURSOR_WIDTH / 2;
     const hit =
       cursorCenter >= targetStart.current &&
       cursorCenter <= targetStart.current + targetWidth;
-    
+
     // Throttled logging - only log every 1 second
     if (Date.now() % 1000 < 100) {
-      console.log('🎯 Move result:', { hit, cursorCenter, targetStart: targetStart.current, targetEnd: targetStart.current + targetWidth });
+      console.log("🎯 Move result:", {
+        hit,
+        cursorCenter,
+        targetStart: targetStart.current,
+        targetEnd: targetStart.current + targetWidth,
+      });
     }
-    
-    setFeedback(hit ? 'success' : 'fail');
-    
+
+    setFeedback(hit ? "success" : "fail");
+
     // Add particles
     const newParticles = Array.from({ length: hit ? 8 : 6 }, (_, i) => ({
       id: particleIdRef.current++,
       x: cursorCenter,
       y: 20,
-      type: hit ? ('success' as const) : ('fail' as const),
+      type: hit ? ("success" as const) : ("fail" as const),
     }));
     setParticles(newParticles);
-    
-    setTimeout(() => {
-      // Throttled logging - only log every 1 second
-      if (Date.now() % 1000 < 100) {
-        console.log('🎯 Calling onResult:', { hit, attempt });
-      }
-      onResult(hit);
-      
-      // Reset state for both success and failure
-      // Throttled logging - only log every 2 seconds
-      if (Date.now() % 2000 < 100) {
-        console.log('🔄 Resetting MoveGameBar state');
-      }
-      setStopping(false);
-      setFeedback('none');
-      setParticles([]);
-      
-      // Only reset target position for failed hits (successful hits should keep the same target)
-      if (!hit) {
-        targetStart.current = Math.floor(Math.random() * (BAR_WIDTH - targetWidth));
-      }
-      
-      // Reset cooldown after a short delay
-      setTimeout(() => setIsCooldown(false), 100);
-    }, hit ? 700 : 500);
+
+    setTimeout(
+      () => {
+        // Throttled logging - only log every 1 second
+        if (Date.now() % 1000 < 100) {
+          console.log("🎯 Calling onResult:", { hit, attempt });
+        }
+        onResult(hit);
+
+        // Reset state for both success and failure
+        // Throttled logging - only log every 2 seconds
+        if (Date.now() % 2000 < 100) {
+          console.log("🔄 Resetting MoveGameBar state");
+        }
+        setStopping(false);
+        setFeedback("none");
+        setParticles([]);
+
+        // Only reset target position for failed hits (successful hits should keep the same target)
+        if (!hit) {
+          targetStart.current = Math.floor(
+            Math.random() * (BAR_WIDTH - targetWidth)
+          );
+        }
+
+        // Reset cooldown after a short delay
+        setTimeout(() => setIsCooldown(false), 100);
+      },
+      hit ? 700 : 500
+    );
   }, [cursorPos, onResult, targetWidth, stopping, isCooldown, attempt]);
 
   // Spacebar/touch support
   useEffect(() => {
     if (!isActive) return;
-    
+
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space' || e.key === ' ') {
+      if (e.code === "Space" || e.key === " ") {
         e.preventDefault();
         handleMove();
       }
     };
-    
+
     // Use keydown with passive: false to prevent default behavior
-    window.addEventListener('keydown', onKeyDown, { passive: false });
-    return () => window.removeEventListener('keydown', onKeyDown);
+    window.addEventListener("keydown", onKeyDown, { passive: false });
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [isActive, handleMove]);
 
   // Animate particles

@@ -7,7 +7,7 @@ import {
   useIsSynchronized,
   useStateTogetherWithPerUserValues
 } from 'react-together';
-import { RaceModelUtils, RaceState, Player } from '../models/RaceModel';
+import { RaceModelUtils, RaceState } from '../models/RaceModel';
 
 export function useMultiplayerRace() {
   const myId = useMyId();
