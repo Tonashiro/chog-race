@@ -49,31 +49,8 @@ const Horse: React.FC<HorseProps> = ({
     };
   }, [status]);
 
-  // Track progress changes
-  useEffect(() => {
-    // Throttled logging - only log every 2 seconds
-    if (Date.now() % 2000 < 100) {
-      console.log("🐎 Progress changed:", {
-        nickname,
-        progress,
-        left: getHorseLeftPosition(progress),
-      });
-    }
-  }, [progress, nickname]);
-
   // Calculate left position based on progress
   const left = getHorseLeftPosition(progress);
-
-  // Throttled logging - only log every 3 seconds
-  if (Date.now() % 3000 < 100) {
-    console.log("🐎 Horse render:", {
-      nickname,
-      progress,
-      left,
-      status,
-      isCurrentUser,
-    });
-  }
 
   return (
     <div

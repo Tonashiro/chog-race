@@ -11,7 +11,7 @@ export interface Player {
 }
 
 export interface RaceState {
-  status: 'waiting' | 'racing' | 'finished';
+  status: "waiting" | "racing" | "finished";
   players: Record<string, Player>;
   finishOrder: string[];
   startTime?: number;
@@ -27,19 +27,21 @@ export class RaceModelUtils {
    */
   static createInitialState(): RaceState {
     const state: RaceState = {
-      status: 'waiting',
+      status: "waiting",
       players: {},
       finishOrder: [],
       maxHits: 10,
     };
-    console.log('🎯 Created initial race state:', state);
     return state;
   }
 
   /**
    * Add a player to the race
    */
-  static addPlayer(state: RaceState | undefined, playerData: { id: string; name: string; logo: string; color?: string }): RaceState {
+  static addPlayer(
+    state: RaceState | undefined,
+    playerData: { id: string; name: string; logo: string; color?: string }
+  ): RaceState {
     // If state is undefined, create a new one
     if (!state) {
       state = this.createInitialState();
@@ -68,7 +70,10 @@ export class RaceModelUtils {
   /**
    * Remove a player from the race
    */
-  static removePlayer(state: RaceState | undefined, playerId: string): RaceState {
+  static removePlayer(
+    state: RaceState | undefined,
+    playerId: string
+  ): RaceState {
     // If state is undefined, create a new one
     if (!state) {
       return this.createInitialState();
@@ -85,22 +90,18 @@ export class RaceModelUtils {
   /**
    * Handle player move
    */
-  static handlePlayerMove(state: RaceState | undefined, playerId: string, success: boolean): RaceState {
+  static handlePlayerMove(
+    state: RaceState | undefined,
+    playerId: string,
+    success: boolean
+  ): RaceState {
     // If state is undefined, create a new one
     if (!state) {
       return this.createInitialState();
     }
 
     const player = state.players[playerId];
-    if (!player || state.status !== 'racing' || player.finished) {
-      // Throttled logging - only log every 2 seconds
-      if (Date.now() % 2000 < 100) {
-        console.log('❌ Cannot handle player move:', { 
-          hasPlayer: !!player, 
-          status: state.status, 
-          playerFinished: player?.finished 
-        });
-      }
+    if (!player || state.status !== "racing" || player.finished) {
       return state;
     }
 
@@ -108,19 +109,6 @@ export class RaceModelUtils {
       const newHits = player.hits + 1;
       const newProgress = Math.min(1, newHits / state.maxHits);
       const isFinished = newHits >= state.maxHits;
-
-      // Throttled logging - only log every 1 second
-      if (Date.now() % 1000 < 100) {
-        console.log('🏇 Updating player progress:', {
-          playerId,
-          oldHits: player.hits,
-          newHits,
-          oldProgress: player.progress,
-          newProgress,
-          maxHits: state.maxHits,
-          isFinished
-        });
-      }
 
       const updatedPlayer = {
         ...player,
@@ -131,11 +119,11 @@ export class RaceModelUtils {
         place: isFinished ? state.finishOrder.length + 1 : 0,
       };
 
-      const newFinishOrder = isFinished 
+      const newFinishOrder = isFinished
         ? [...state.finishOrder, playerId]
         : state.finishOrder;
 
-      const allFinished = Object.values(state.players).every(p => 
+      const allFinished = Object.values(state.players).every((p) =>
         p.id === playerId ? updatedPlayer.finished : p.finished
       );
 
@@ -146,20 +134,12 @@ export class RaceModelUtils {
           [playerId]: updatedPlayer,
         },
         finishOrder: newFinishOrder,
-        status: allFinished ? 'finished' : state.status,
+        status: allFinished ? "finished" : state.status,
       };
 
-      // Throttled logging - only log every 2 seconds
-      if (Date.now() % 2000 < 100) {
-        console.log('🔄 New race state after move:', newState);
-      }
       return newState;
     }
 
-    // Throttled logging - only log every 2 seconds
-    if (Date.now() % 2000 < 100) {
-      console.log('❌ Move failed, no state change');
-    }
     return state;
   }
 
@@ -172,18 +152,18 @@ export class RaceModelUtils {
       return this.createInitialState();
     }
 
-    if (state.status === 'waiting' && Object.keys(state.players).length > 0) {
+    if (state.status === "waiting" && Object.keys(state.players).length > 0) {
       return {
         ...state,
-        status: 'racing',
+        status: "racing",
         startTime: Date.now(),
         finishOrder: [],
         players: Object.fromEntries(
           Object.entries(state.players).map(([id, player]) => [
             id,
-            { ...player, progress: 0, finished: false, hits: 0, place: 0 }
+            { ...player, progress: 0, finished: false, hits: 0, place: 0 },
           ])
-        )
+        ),
       };
     }
     return state;
@@ -200,7 +180,7 @@ export class RaceModelUtils {
 
     return {
       ...state,
-      status: 'finished',
+      status: "finished",
     };
   }
 
@@ -215,22 +195,25 @@ export class RaceModelUtils {
 
     return {
       ...state,
-      status: 'waiting',
+      status: "waiting",
       finishOrder: [],
       startTime: undefined,
       players: Object.fromEntries(
         Object.entries(state.players).map(([id, player]) => [
           id,
-          { ...player, progress: 0, finished: false, hits: 0, place: 0 }
+          { ...player, progress: 0, finished: false, hits: 0, place: 0 },
         ])
-      )
+      ),
     };
   }
 
   /**
    * Get player by ID
    */
-  static getPlayer(state: RaceState | undefined, playerId: string): Player | undefined {
+  static getPlayer(
+    state: RaceState | undefined,
+    playerId: string
+  ): Player | undefined {
     if (!state || !state.players) {
       return undefined;
     }
@@ -250,7 +233,10 @@ export class RaceModelUtils {
   /**
    * Check if player is finished
    */
-  static isPlayerFinished(state: RaceState | undefined, playerId: string): boolean {
+  static isPlayerFinished(
+    state: RaceState | undefined,
+    playerId: string
+  ): boolean {
     if (!state || !state.players) {
       return false;
     }
@@ -260,10 +246,13 @@ export class RaceModelUtils {
   /**
    * Get player place
    */
-  static getPlayerPlace(state: RaceState | undefined, playerId: string): number {
+  static getPlayerPlace(
+    state: RaceState | undefined,
+    playerId: string
+  ): number {
     if (!state || !state.players) {
       return 0;
     }
     return state.players[playerId]?.place || 0;
   }
-} 
+}

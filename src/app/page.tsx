@@ -63,7 +63,6 @@ const MultiplayerRaceGame: React.FC = () => {
     allPlayerHits,
     raceStartTime,
     playerCompletionTimes,
-    testSync,
   } = useMultiplayerRace();
 
   const { debouncedClick } = useDebouncedClick();
@@ -115,7 +114,7 @@ const MultiplayerRaceGame: React.FC = () => {
         onEndRace={() => debouncedClick(endRace, "End Race")}
         onResetRace={() => debouncedClick(resetRace, "Reset Race")}
         onForceReset={() => debouncedClick(forceReset, "Force Reset")}
-        onTestSync={() => debouncedClick(testSync, "Test Sync")}
+
       />
 
       {/* Game Area */}

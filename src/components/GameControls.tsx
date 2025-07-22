@@ -10,7 +10,7 @@ interface GameControlsProps {
   onEndRace: () => void;
   onResetRace: () => void;
   onForceReset: () => void;
-  onTestSync?: () => void;
+
 }
 
 /**
@@ -24,7 +24,6 @@ const GameControls: React.FC<GameControlsProps> = ({
   onEndRace,
   onResetRace,
   onForceReset,
-  onTestSync
 }) => {
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-6">
@@ -88,16 +87,7 @@ const GameControls: React.FC<GameControlsProps> = ({
           </Button>
         )}
 
-        {/* Test Sync button for debugging */}
-        {onTestSync && (
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={onTestSync}
-          >
-            🧪 Test Sync
-          </Button>
-        )}
+
       </div>
     </div>
   );

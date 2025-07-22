@@ -88,10 +88,6 @@ const MoveGameBar: React.FC<MoveGameBarProps> = ({
 
   // Reset on active/attempt
   useEffect(() => {
-    // Throttled logging - only log every 3 seconds
-    if (Date.now() % 3000 < 100) {
-      console.log("🔄 MoveGameBar reset:", { isActive, attempt, targetWidth });
-    }
     setCursorPos(0);
     setDir(1);
     setStopping(false);
@@ -102,20 +98,7 @@ const MoveGameBar: React.FC<MoveGameBarProps> = ({
 
   // Handle Move
   const handleMove = useCallback(() => {
-    // Throttled logging - only log every 1 second
-    if (Date.now() % 1000 < 100) {
-      console.log("🎯 MoveGameBar handleMove called:", {
-        stopping,
-        isCooldown,
-        attempt,
-      });
-    }
-
     if (stopping || isCooldown) {
-      // Throttled logging - only log every 2 seconds
-      if (Date.now() % 2000 < 100) {
-        console.log("❌ Move blocked:", { stopping, isCooldown });
-      }
       return;
     }
 
@@ -124,10 +107,6 @@ const MoveGameBar: React.FC<MoveGameBarProps> = ({
 
     // Prevent spam: minimum 300ms between interactions
     if (timeSinceLastInteraction < 300) {
-      // Throttled logging - only log every 2 seconds
-      if (Date.now() % 2000 < 100) {
-        console.log("❌ Move blocked by cooldown:", timeSinceLastInteraction);
-      }
       return;
     }
 
@@ -139,16 +118,6 @@ const MoveGameBar: React.FC<MoveGameBarProps> = ({
     const hit =
       cursorCenter >= targetStart.current &&
       cursorCenter <= targetStart.current + targetWidth;
-
-    // Throttled logging - only log every 1 second
-    if (Date.now() % 1000 < 100) {
-      console.log("🎯 Move result:", {
-        hit,
-        cursorCenter,
-        targetStart: targetStart.current,
-        targetEnd: targetStart.current + targetWidth,
-      });
-    }
 
     setFeedback(hit ? "success" : "fail");
 
@@ -164,17 +133,9 @@ const MoveGameBar: React.FC<MoveGameBarProps> = ({
 
     setTimeout(
       () => {
-        // Throttled logging - only log every 1 second
-        if (Date.now() % 1000 < 100) {
-          console.log("🎯 Calling onResult:", { hit, attempt });
-        }
         onResult(hit);
 
         // Reset state for both success and failure
-        // Throttled logging - only log every 2 seconds
-        if (Date.now() % 2000 < 100) {
-          console.log("🔄 Resetting MoveGameBar state");
-        }
         setStopping(false);
         setFeedback("none");
         setParticles([]);
@@ -191,7 +152,7 @@ const MoveGameBar: React.FC<MoveGameBarProps> = ({
       },
       hit ? 700 : 500
     );
-  }, [cursorPos, onResult, targetWidth, stopping, isCooldown, attempt]);
+  }, [cursorPos, onResult, targetWidth, stopping, isCooldown]);
 
   // Spacebar/touch support
   useEffect(() => {
