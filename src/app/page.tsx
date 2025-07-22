@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { useMultiplayerRace } from "../hooks/useMultiplayerRace";
 import { useDebouncedClick } from "../hooks/useDebouncedClick";
 import { useRaceResults } from "../hooks/useRaceResults";
@@ -12,11 +13,33 @@ import GameArea from "../components/GameArea";
 import GameStats from "../components/GameStats";
 import Leaderboard from "../components/Leaderboard";
 
+// Dynamically import ReactTogetherWrapper to prevent SSR issues
+const ReactTogetherWrapper = dynamic(
+  () => import("../components/ReactTogetherWrapper"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-2xl mb-4">🏇</div>
+          <div className="text-lg font-semibold text-gray-700">
+            Loading Chog Race...
+          </div>
+        </div>
+      </div>
+    ),
+  }
+);
+
 /**
  * Main page for the Chog Race game.
  */
 const RacePage: React.FC = () => {
-  return <MultiplayerRaceGame />;
+  return (
+    <ReactTogetherWrapper>
+      <MultiplayerRaceGame />
+    </ReactTogetherWrapper>
+  );
 };
 
 /**

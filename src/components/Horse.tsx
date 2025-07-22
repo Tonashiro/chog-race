@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { RaceStatus } from "../types";
 import { getHorseLeftPosition } from "../utils/animation";
 
@@ -23,7 +24,13 @@ export interface HorseProps {
 /**
  * Horse component that animates the horse sprite and displays the participant logo.
  */
-const Horse: React.FC<HorseProps> = ({ place, logo, status, progress, nickname, isCurrentUser }) => {
+const Horse: React.FC<HorseProps> = ({
+  logo,
+  status,
+  progress,
+  nickname,
+  isCurrentUser,
+}) => {
   const [frame, setFrame] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -46,7 +53,11 @@ const Horse: React.FC<HorseProps> = ({ place, logo, status, progress, nickname, 
   useEffect(() => {
     // Throttled logging - only log every 2 seconds
     if (Date.now() % 2000 < 100) {
-      console.log('🐎 Progress changed:', { nickname, progress, left: getHorseLeftPosition(progress) });
+      console.log("🐎 Progress changed:", {
+        nickname,
+        progress,
+        left: getHorseLeftPosition(progress),
+      });
     }
   }, [progress, nickname]);
 
@@ -55,39 +66,42 @@ const Horse: React.FC<HorseProps> = ({ place, logo, status, progress, nickname, 
 
   // Throttled logging - only log every 3 seconds
   if (Date.now() % 3000 < 100) {
-    console.log('🐎 Horse render:', {
+    console.log("🐎 Horse render:", {
       nickname,
       progress,
       left,
       status,
-      isCurrentUser
+      isCurrentUser,
     });
   }
 
   return (
-    <div 
-      className="relative flex items-center h-28" 
-      style={{ 
-        left, 
-        transition: 'left 0.2s ease-out' // Faster transition for better visibility
+    <div
+      className="relative flex items-center h-28"
+      style={{
+        left,
+        transition: "left 0.2s ease-out", // Faster transition for better visibility
       }}
     >
       {/* Nickname label */}
       {nickname && (
         <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-20">
-          <div className={`
+          <div
+            className={`
             px-3 py-1 rounded-full text-sm font-semibold shadow-lg border-2
-            ${isCurrentUser 
-              ? 'bg-blue-500 text-white border-blue-600' 
-              : 'bg-white text-gray-800 border-gray-300'
+            ${
+              isCurrentUser
+                ? "bg-blue-500 text-white border-blue-600"
+                : "bg-white text-gray-800 border-gray-300"
             }
-          `}>
+          `}
+          >
             {nickname}
             {isCurrentUser && <span className="ml-1">(You)</span>}
           </div>
         </div>
       )}
-      
+
       <div
         className="w-28 h-28 bg-no-repeat bg-left-bottom flex items-center justify-center"
         style={{
@@ -96,10 +110,12 @@ const Horse: React.FC<HorseProps> = ({ place, logo, status, progress, nickname, 
           backgroundSize: "672px 112px",
         }}
       >
-        <img
+        <Image
           src={logo}
           alt="Participant Logo"
-          className="absolute w-8 h-8 left-2 top-2 rounded-full border-2 border-white bg-white shadow"
+          width={32}
+          height={32}
+          className="absolute left-2 top-2 rounded-full border-2 border-white bg-white shadow"
           draggable={false}
         />
       </div>

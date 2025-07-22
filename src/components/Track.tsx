@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { RaceResult, RaceStatus } from "../types";
 import Horse from "./Horse";
 import Trophy from "./Trophy";
@@ -27,9 +28,11 @@ export interface TrackProps {
  */
 const Track: React.FC<TrackProps> = ({ result, status, isFirst, trophyPlace, nickname, isCurrentUser }) => (
   <div className="relative w-full flex items-center h-28">
-    <img
+    <Image
       src={isFirst ? "/track_top.webp" : "/track.webp"}
       alt="Track background"
+      width={800}
+      height={112}
       className="absolute w-full h-full left-0 top-0 z-0"
       draggable={false}
     />

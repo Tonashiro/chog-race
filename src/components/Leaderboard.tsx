@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import Button from './ui/Button';
 import { LeaderboardData, formatPlayerStats } from '../utils/leaderboard';
 import { getTrophyEmoji } from '../utils/gameLogic';
@@ -46,10 +47,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({
               </div>
               
               <div className="flex items-center gap-3">
-                <img
+                <Image
                   src={player.logo}
                   alt="Player Logo"
-                  className="w-8 h-8 rounded-full border-2 border-white shadow"
+                  width={32}
+                  height={32}
+                  className="rounded-full border-2 border-white shadow"
                 />
                 <div>
                   <div className="font-semibold text-gray-800">

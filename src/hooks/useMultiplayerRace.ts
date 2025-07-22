@@ -29,7 +29,7 @@ export function useMultiplayerRace() {
       console.log('🎯 Expected initial state:', RaceModelUtils.createInitialState());
     };
     logOnce();
-  }, []);
+  }, [raceState]);
 
   // Debug state changes
   useEffect(() => {

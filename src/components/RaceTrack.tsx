@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { RaceResult, RaceStatus } from "../types";
 import Track from "./Track";
 
@@ -25,9 +26,11 @@ const RaceTrack: React.FC<RaceTrackProps> = ({
   currentUserId,
 }) => (
   <div className="relative w-full h-full flex flex-col my-6">
-    <img
+    <Image
       src={"/top.webp"}
       alt="Top background"
+      width={800}
+      height={400}
       className="w-full h-[400px]"
       draggable={false}
     />
@@ -45,9 +48,11 @@ const RaceTrack: React.FC<RaceTrackProps> = ({
         isCurrentUser={currentUserId === result.participant.id}
       />
     ))}
-    <img
+    <Image
       src={"/bottom.webp"}
       alt="Bottom background"
+      width={800}
+      height={400}
       className="w-full h-full"
       draggable={false}
     />

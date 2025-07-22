@@ -153,6 +153,7 @@ const MoveGameBar: React.FC<MoveGameBarProps> = ({
     setFeedback(hit ? "success" : "fail");
 
     // Add particles
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const newParticles = Array.from({ length: hit ? 8 : 6 }, (_, i) => ({
       id: particleIdRef.current++,
       x: cursorCenter,

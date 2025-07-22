@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 /**
  * Props for the Trophy component.
@@ -20,10 +21,12 @@ const trophyImages: Record<number, string> = {
 const Trophy: React.FC<TrophyProps> = ({ place }) => {
   if (place >= 1 && place <= 3) {
     return (
-      <img
+      <Image
         src={trophyImages[place]}
         alt={`Trophy ${place}`}
-        className="w-18 h-18 object-contain drop-shadow"
+        width={72}
+        height={72}
+        className="object-contain drop-shadow"
         draggable={false}
       />
     );
