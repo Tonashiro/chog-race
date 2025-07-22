@@ -3,7 +3,6 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import { useMultiplayerRace } from "../hooks/useMultiplayerRace";
-import { useDebouncedClick } from "../hooks/useDebouncedClick";
 import { useRaceResults } from "../hooks/useRaceResults";
 import { createLeaderboardData } from "../utils/leaderboard";
 import { getDisplayStatus } from "../utils/gameLogic";
@@ -65,7 +64,6 @@ const MultiplayerRaceGame: React.FC = () => {
     playerCompletionTimes,
   } = useMultiplayerRace();
 
-  const { debouncedClick } = useDebouncedClick();
   const { getRaceResults } = useRaceResults(getPlayers, allPlayerHits);
 
   // Get current status as display status
@@ -110,11 +108,10 @@ const MultiplayerRaceGame: React.FC = () => {
         currentStatus={currentStatus}
         isSynchronized={isSynchronized}
         connectedUsers={connectedUsers}
-        onStartRace={() => debouncedClick(startRace, "Start Race")}
-        onEndRace={() => debouncedClick(endRace, "End Race")}
-        onResetRace={() => debouncedClick(resetRace, "Reset Race")}
-        onForceReset={() => debouncedClick(forceReset, "Force Reset")}
-
+        onStartRace={startRace}
+        onEndRace={endRace}
+        onResetRace={resetRace}
+        onForceReset={forceReset}
       />
 
       {/* Game Area */}
@@ -140,7 +137,7 @@ const MultiplayerRaceGame: React.FC = () => {
         <Leaderboard
           leaderboardData={leaderboardData}
           raceStartTime={raceStartTime}
-          onStartNewRace={() => debouncedClick(resetRace, "New Race")}
+          onStartNewRace={resetRace}
         />
       )}
     </div>
